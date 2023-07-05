@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.messages import constants
+from extrato.utils import calcular_operação
 
 from perfil.models import Conta, Categoria
 from .models import Valores
@@ -22,12 +23,16 @@ def novo_valor(request):
         
         valores = Valores.objects.create(
             valor=valor,
-            categoria=categoria,
+            categoria_id=categoria,
             descricao=descricao,
             data=data,
-            conta=conta,
+            conta_id=conta,
             tipo = tipo,
         )
     
-    messages.add_message(request, constants.SUCCESS, 'Operação registrada com sucesso!')
+        calcular_operação(valores.conta, float(valores.valor), valores.tipo)
+        
+    
+    # get_tipo_display(), serve para acessar o valor do choice
+    messages.add_message(request, constants.SUCCESS, f'{valores.get_tipo_display()} registrada com sucesso!')
     return redirect('/extrato/novo_valor/')
