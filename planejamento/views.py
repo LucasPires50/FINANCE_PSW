@@ -4,8 +4,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.messages import constants
+from extrato.models import Valores
 
 from perfil.models import Categoria
+from perfil.utils import calcula_total
 
 def definir_planejamento(request):
     categorias = Categoria.objects.all()
@@ -23,4 +25,13 @@ def update_valor_categoria(request, id):
 def ver_planejamento(request):
     categorias = Categoria.objects.all()
     #TODO: Fazer a barra com o total gasto
-    return render(request, 'ver_planejamento.html', {'categorias': categorias})
+
+    valores = Valores.objects.all()
+
+    total_gasto = calcula_total(valores, "valor")
+    
+    total_planejamento = calcula_total(categorias, "valor_planejamento")
+    
+    calcular_porcentagem_total_gatos = int((total_gasto * 100) / total_planejamento)
+    
+    return render(request, 'ver_planejamento.html', {'categorias': categorias, "total_gasto": total_gasto, "total_planejamento": total_planejamento, "calcular_porcentagem_total_gatos": calcular_porcentagem_total_gatos})
