@@ -30,6 +30,9 @@
             <div class="col-md-8">
                 <p class="fonte-destaque" style="color: red;">Contas vencidas</p>
                 <div class="card">
+                    {% if not restantes %}
+                        <p>Nenhuma conta proxima do vencida</p>
+                    {% else %}  
                         {% for contas_vencida in contas_vencidas %}
                             <div class="linha-conta">
                                 <div class="row">
@@ -45,11 +48,15 @@
                                 </div>
                             </div>
                         {% endfor %}
+                    {% endif %}
                 </div>
                 <br>
                 <br>
                 <p class="fonte-destaque" style="color: #E96363;">Contas próximas do vencimento</p>
                 <div class="card">
+                    {% if not restantes %}
+                        <p>Nenhuma conta proxima do vencimento</p>
+                    {% else %}  
                     
                         {% for conta_proxima_vencimento in contas_proximas_vencimento %}
                             <div class="linha-conta">
@@ -66,13 +73,17 @@
                                 </div>
                             </div>
                         {% endfor %}
+                    {% endif %}
                     
                 </div>
                 <br>
                 <br>
                 <p class="fonte-destaque">Restantes</p>
                 <div class="card">
-                
+                    {% if not restantes %}
+                        <p>Nenhuma conta restante</p>
+                    {% else %}
+                    
                         {% for restante in restantes %}
                             <div class="linha-conta">
                                 <div class="row">
@@ -88,6 +99,7 @@
                                 </div>
                             </div>
                         {% endfor %}
+                    {% endif %}
                        
                     
                 </div>
