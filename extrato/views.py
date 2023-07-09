@@ -14,6 +14,7 @@ from weasyprint import HTML
 from io import BytesIO
 
 from perfil.models import Conta, Categoria
+from utils.utils_geral import mes_atual
 from .models import Valores
 
 
@@ -50,7 +51,7 @@ def novo_valor(request):
 def view_extrato(request):
     contas = Conta.objects.all()
     categorias = Categoria.objects.all()
-    valores = Valores.objects.filter(data__month=datetime.now().month)
+    valores = Valores.objects.filter(data__month=mes_atual())
     conta_get = request.GET.get('conta', None)
     categoria_get = request.GET.get('categoria', None)
     periodo_get = request.GET.get('periodo', None)
@@ -68,7 +69,7 @@ def view_extrato(request):
     return render(request, 'view_extrato.html', {"valores":valores, "categorias":categorias, "contas":contas})
 
 def exportar_pdf(request):
-    valores = Valores.objects.filter(data__month=datetime.now().month)
+    valores = Valores.objects.filter(data__month=mes_atual())
     
     path_template = os.path.join(settings.BASE_DIR, 'templates/partials/extrato.html')
     template_render = render_to_string(path_template, {'valores':valores})

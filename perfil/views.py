@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.messages import constants
 
-from datetime import datetime
+from contas.utils import bucar_contas
+from utils.utils_geral import mes_atual
 
 from .models import Conta, Categoria
 from extrato.models import Valores
@@ -11,17 +12,21 @@ from .utils import calcula_total, calcula_equilibiro_financeiro
 
 def home(request):
     contas = Conta.objects.all()
-    valores = Valores.objects.filter(data__month=datetime.now().month)
+    
+    contas_pagas, contas_vencidas, contas_proximas_vencimento, restantes = bucar_contas()
+    
+    valores = Valores.objects.filter(data__month=mes_atual())
     entradas = valores.filter(tipo="E")
     saidas = valores.filter(tipo="S")
     
     total_contas = calcula_total(contas, 'valor')
     total_entradas = calcula_total(entradas, 'valor')
     total_saidas = calcula_total(saidas, 'valor')
+    total_livre = total_entradas - total_saidas
     
     percental_gastos_essencias, percental_gastos_nao_essencias = calcula_equilibiro_financeiro()
     
-    return render(request, 'home.html', {'contas': contas, 'total_contas':total_contas, 'total_entradas':total_entradas, 'total_saidas':total_saidas, 'percental_gastos_essencias':int(percental_gastos_essencias), 'percental_gastos_nao_essencias':int(percental_gastos_nao_essencias)})
+    return render(request, 'home.html', {'contas': contas, 'total_contas':total_contas, 'total_entradas':total_entradas, 'total_saidas':total_saidas, 'percental_gastos_essencias':int(percental_gastos_essencias), 'percental_gastos_nao_essencias':int(percental_gastos_nao_essencias), 'total_livre':total_livre, 'contas_vencidas':contas_vencidas.count(), 'contas_proximas_vencimento':contas_proximas_vencimento.count()})
 
 def gerenciar(request):
     contas = Conta.objects.all()

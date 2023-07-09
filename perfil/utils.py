@@ -1,7 +1,7 @@
 
 from django.db.models import Sum
 
-from datetime import datetime
+from utils.utils_geral import mes_atual
 
 
 def calcula_total(obj, campo):
@@ -13,8 +13,8 @@ def calcula_total(obj, campo):
 def calcula_equilibiro_financeiro():
     # Para evitar importação circular
     from extrato.models import Valores
-    gastos_essencias = Valores.objects.filter(data__month=datetime.now().month).filter(tipo="S").filter(categoria__essencial=True)
-    gastos_nao_essencias = Valores.objects.filter(data__month=datetime.now().month).filter(tipo="S").filter(categoria__essencial=False)
+    gastos_essencias = Valores.objects.filter(data__month=mes_atual()).filter(tipo="S").filter(categoria__essencial=True)
+    gastos_nao_essencias = Valores.objects.filter(data__month=mes_atual()).filter(tipo="S").filter(categoria__essencial=False)
     
     total_gastos_essencias = calcula_total(gastos_essencias, 'valor')
     total_gastos_nao_essencias = calcula_total(gastos_nao_essencias, 'valor')

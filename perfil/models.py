@@ -1,8 +1,7 @@
 from django.db import models
 
-from datetime import datetime
-
 from perfil.utils import calcula_total
+from utils.utils_geral import mes_atual
 
 class Categoria(models.Model):
     
@@ -15,7 +14,7 @@ class Categoria(models.Model):
     
     def total_gasto(self):
         from extrato.models import Valores
-        valores = Valores.objects.filter(categoria__id=self.id).filter(data__month=datetime.now().month).filter(tipo="S")
+        valores = Valores.objects.filter(categoria__id=self.id).filter(data__month=mes_atual()).filter(tipo="S")
 
         total_valor = calcula_total(valores, "valor")
         
