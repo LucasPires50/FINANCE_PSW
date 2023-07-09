@@ -30,7 +30,7 @@
             <div class="col-md-8">
                 <p class="fonte-destaque" style="color: red;">Contas vencidas</p>
                 <div class="card">
-                    {% if not restantes %}
+                    {% if not contas_vencida %}
                         <p>Nenhuma conta proxima do vencida</p>
                     {% else %}  
                         {% for contas_vencida in contas_vencidas %}
@@ -55,7 +55,7 @@
                 <br>
                 <p class="fonte-destaque" style="color: #E96363;">Contas próximas do vencimento</p>
                 <div class="card">
-                    {% if not restantes %}
+                    {% if not conta_proxima_vencimento %}
                         <p>Nenhuma conta proxima do vencimento</p>
                     {% else %}  
                     
