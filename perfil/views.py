@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.messages import constants
 
 from .models import Conta, Categoria
+from extrato.models import Valores
 from .utils import calcula_total
 
 def home(request):
@@ -87,3 +88,17 @@ def update_categoria(request, id):
     
     messages.add_message(request, constants.SUCCESS, 'Categoria atualizada com sucesso')
     return redirect('/perfil/gerenciar/')
+
+def dashboard(request):
+    dados  = {}
+    categorias = Categoria.objects.all()
+    
+    for categoria in categorias:
+        valores = Valores.objects.filter(categoria=categoria)
+        total_gasto = calcula_total(valores, 'valor')
+        dados[categoria.categoria] = total_gasto
+    
+    print(dados)
+
+    return render(request, 'dashboard.html', {'labels': list(dados.keys()), 
+                                              'values': list(dados.values())})
