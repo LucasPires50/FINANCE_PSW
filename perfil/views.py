@@ -26,7 +26,17 @@ def home(request):
     
     percental_gastos_essencias, percental_gastos_nao_essencias = calcula_equilibiro_financeiro()
     
-    return render(request, 'home.html', {'contas': contas, 'total_contas':total_contas, 'total_entradas':total_entradas, 'total_saidas':total_saidas, 'percental_gastos_essencias':int(percental_gastos_essencias), 'percental_gastos_nao_essencias':int(percental_gastos_nao_essencias), 'total_livre':total_livre, 'contas_vencidas':contas_vencidas.count(), 'contas_proximas_vencimento':contas_proximas_vencimento.count()})
+    print(percental_gastos_essencias, percental_gastos_nao_essencias)
+    
+    return render(request, 'home.html', {'contas': contas, 
+                                         'total_contas':total_contas, 
+                                         'total_entradas':total_entradas, 
+                                         'total_saidas':total_saidas, 
+                                         'percental_gastos_essencias':percental_gastos_essencias, 
+                                         'percental_gastos_nao_essencias':percental_gastos_nao_essencias, 
+                                         'total_livre':total_livre, 
+                                         'contas_vencidas':contas_vencidas.count(), 
+                                         'contas_proximas_vencimento':contas_proximas_vencimento.count()})
 
 def gerenciar(request):
     contas = Conta.objects.all()
@@ -34,7 +44,9 @@ def gerenciar(request):
 
     total_contas = calcula_total(contas, 'valor')
     
-    return render(request, 'gerenciar.html', {'contas': contas, 'total_contas':total_contas, 'categorias':categorias})
+    return render(request, 'gerenciar.html', {'contas': contas, 
+                                              'total_contas':total_contas, 
+                                              'categorias':categorias})
 
 def cadastrar_banco(request):
     # Sempre que for para pegar dados normais é atraves do post
@@ -50,15 +62,13 @@ def cadastrar_banco(request):
         messages.add_message(request, constants.ERROR, 'Preencha todos os campos')
         return redirect('/perfil/gerenciar/')
     
-    conta = Conta(
+    conta = Conta.objects.create(
         apelido=apelido,
         banco=banco,
         tipo=tipo,
         valor=valor,
         icone=icone
     )
-    
-    conta.save()
     
     # Mandar a menssagem de sucesso para o front
     messages.add_message(request, constants.SUCCESS, 'Conta cadastrada com sucesso!')
@@ -85,12 +95,10 @@ def cadastrar_categoria(request):
         messages.add_message(request, constants.ERROR, 'Valor inválido')
         return redirect('/perfil/gerenciar/')
 
-    categoria = Categoria(
+    categoria = Categoria.objects.create(
         categoria=nome,
         essencial=essencial
     )
-
-    categoria.save()
 
     messages.add_message(request, constants.SUCCESS, 'Categoria cadastrada com sucesso')
     return redirect('/perfil/gerenciar/')

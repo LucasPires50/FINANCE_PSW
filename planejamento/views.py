@@ -8,6 +8,7 @@ from extrato.models import Valores
 
 from perfil.models import Categoria
 from perfil.utils import calcula_total
+from utils.utils_geral import calula_porcentagem
 
 def definir_planejamento(request):
     categorias = Categoria.objects.all()
@@ -24,7 +25,6 @@ def update_valor_categoria(request, id):
 
 def ver_planejamento(request):
     categorias = Categoria.objects.all()
-    #TODO: Fazer a barra com o total gasto
 
     valores = Valores.objects.all()
 
@@ -32,6 +32,9 @@ def ver_planejamento(request):
     
     total_planejamento = calcula_total(categorias, "valor_planejamento")
     
-    calcular_porcentagem_total_gatos = int((total_gasto * 100) / total_planejamento)
+    calcular_porcentagem_total_gatos = calula_porcentagem(total_gasto, total_planejamento)
     
-    return render(request, 'ver_planejamento.html', {'categorias': categorias, "total_gasto": total_gasto, "total_planejamento": total_planejamento, "calcular_porcentagem_total_gatos": calcular_porcentagem_total_gatos})
+    return render(request, 'ver_planejamento.html', {'categorias': categorias, 
+                                                     "total_gasto": total_gasto, 
+                                                     "total_planejamento": total_planejamento, 
+                                                     "calcular_porcentagem_total_gatos": calcular_porcentagem_total_gatos})
