@@ -5,3 +5,7 @@ def mes_atual():
 
 def dia_atual():
     return datetime.now().day
+
+def calula_porcentagem(porcentagem, valor):
+    return int((porcentagem * 100) / valor)
+    

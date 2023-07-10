@@ -1,7 +1,7 @@
 from django.db import models
 
 from perfil.utils import calcula_total
-from utils.utils_geral import mes_atual
+from utils.utils_geral import calula_porcentagem, mes_atual
 
 class Categoria(models.Model):
     
@@ -21,7 +21,7 @@ class Categoria(models.Model):
         return total_valor
     
     def cacula_percentual_gasto_por_categoria(self):
-        return int((self.total_gasto() * 100) / self.valor_planejamento)
+        return calula_porcentagem(self.total_gasto(), self.valor_planejamento)
 
 class Conta(models.Model):
     banco_choices = (

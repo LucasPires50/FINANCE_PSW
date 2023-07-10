@@ -1,7 +1,7 @@
 
 from django.db.models import Sum
 
-from utils.utils_geral import mes_atual
+from utils.utils_geral import calula_porcentagem, mes_atual
 
 
 def calcula_total(obj, campo):
@@ -21,8 +21,8 @@ def calcula_equilibiro_financeiro():
     
     total = total_gastos_essencias + total_gastos_nao_essencias
     try:
-        percentual_gastos_essencias = (total_gastos_essencias * 100) / total
-        percentual_gastos_nao_essencias = (total_gastos_nao_essencias * 100) / total
+        percentual_gastos_essencias = calula_porcentagem(total_gastos_essencias, total)
+        percentual_gastos_nao_essencias = calula_porcentagem(total_gastos_nao_essencias, total)
         return percentual_gastos_essencias, percentual_gastos_nao_essencias
     except :
         return 0, 0
